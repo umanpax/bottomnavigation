@@ -185,9 +185,11 @@ class TeamViewModelTest {
 
         if(viewModel.getViewState().first().error.isNotEmpty()){
             assert(viewModel.getViewState().first().error.isNotEmpty())
+            assert(viewModel.getViewState().first().teams.isEmpty())
         }
         if(viewModel.getViewState().first().teams.isNotEmpty()){
             assert(viewModel.getViewState().first().teams.isNotEmpty())
+            assert(viewModel.getViewState().first().error.isEmpty())
         }
     }
 }

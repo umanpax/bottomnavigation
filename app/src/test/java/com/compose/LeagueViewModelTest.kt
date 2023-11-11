@@ -6,16 +6,10 @@ import com.compose.features.league.states.LeagueViewState
 import com.compose.features.league.viewmodels.LeagueViewModel
 import com.compose.model.League
 import com.compose.model.Leagues
-import io.mockk.coEvery
-import io.mockk.coVerify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.runTest
-import okhttp3.internal.wait
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -80,10 +74,12 @@ class LeagueViewModelTest {
         viewModel.getLeagues()
 
         if(viewModel.getViewState().first().error.isNotEmpty()){
+            assert(viewModel.getViewState().first().leagues.isEmpty())
             assert(viewModel.getViewState().first().error.isNotEmpty())
         }
 
         if(viewModel.getViewState().first().leagues.isNotEmpty()){
+            assert(viewModel.getViewState().first().error.isEmpty())
             assert(viewModel.getViewState().first().leagues.isNotEmpty())
         }
     }
