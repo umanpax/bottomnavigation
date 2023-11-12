@@ -34,13 +34,6 @@ jobs:
           name: test-results
           path: app/build/test-results
 
-      - name: Comment on PR
-        if: failure() # Exécuter seulement en cas d'erreur
-        run: |
-          echo "The CI workflow has completed. Status: ${{ job.status }}"
-          echo "::set-output name=comment::The CI workflow has completed. Status: ${{ job.status }}"
-        id: comment
-
       - name: Comment on PR (GitHub Script)
         if: failure() # Exécuter seulement en cas d'erreur
         uses: actions/github-script@v5
@@ -48,13 +41,13 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const comment = process.env.comment;
-            const { context: githubContext, getOctokit } = require('@actions/github');
+            const { context, getOctokit } = require('@actions/github');
 
             const octokit = new getOctokit(process.env.GITHUB_TOKEN);
 
             octokit.issues.createComment({
-              owner: githubContext.repo.owner,
-              repo: githubContext.repo.repo,
-              issue_number: githubContext.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
               body: comment,
             });
