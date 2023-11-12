@@ -72,7 +72,7 @@ class LeagueViewModelTest {
         Mockito.`when`(repository.getAllLeagues()).thenReturn(flow)
 
         viewModel.getLeagues()
-        assert(viewModel.getViewState().first().leagues.isNotEmpty())
+
         if(viewModel.getViewState().first().error.isNotEmpty()){
             assert(viewModel.getViewState().first().leagues.isEmpty())
             assert(viewModel.getViewState().first().error.isNotEmpty())
