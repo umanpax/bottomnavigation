@@ -33,19 +33,8 @@ jobs:
           name: test-results
           path: app/build/test-results
 
-      - name: Set Status - Success
-        if: ${{ failure() == false }}
-        uses: softprops/action-gh-release@v1
-        with:
-          files: /dev/null
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set Status - Failure
-        if: ${{ failure() == true }}
-        uses: softprops/action-gh-release@v1
-        with:
-          files: /dev/null
-          tag_name: failure
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prevent Merge on Failure
+        if: failure()
+        run: |
+          echo "Workflow failed. Branch cannot be merged."
+          exit 1
