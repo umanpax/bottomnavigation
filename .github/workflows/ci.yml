@@ -16,7 +16,6 @@ jobs:
       - name: Set up JDK and Android
         uses: actions/setup-java@v2
         with:
-          with:
           distribution: 'adopt'
           java-version: '11'
           sdk-platform: "android-34"
@@ -33,3 +32,20 @@ jobs:
         with:
           name: test-results
           path: app/build/test-results
+
+      - name: Set Status - Success
+        if: ${{ failure() == false }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: /dev/null
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set Status - Failure
+        if: ${{ failure() == true }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: /dev/null
+          tag_name: failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
