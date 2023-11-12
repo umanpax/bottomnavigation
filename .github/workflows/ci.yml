@@ -1,4 +1,4 @@
-name: Pipelines CI
+name: CI
 
 on:
   pull_request:
@@ -35,7 +35,26 @@ jobs:
 
       - name: Comment on PR
         if: failure() # Exécuter seulement en cas d'erreur
-        uses: pullreminders/comment-on-failure@v1
+        run: |
+          echo "The CI workflow has completed. Status: ${{ job.status }}"
+          echo "::set-output name=comment::The CI workflow has completed. Status: ${{ job.status }}"
+        id: comment
+
+      - name: Comment on PR (GitHub Script)
+        if: failure() # Exécuter seulement en cas d'erreur
+        uses: actions/github-script@v5
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          message: "The CI workflow has completed. Status: ${{ job.status }}"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const comment = process.env.comment;
+            const github = require('@actions/github');
+            const context = github.context;
+
+            const octokit = new github.getOctokit(process.env.GITHUB_TOKEN);
+
+            octokit.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment,
+            });
