@@ -5,3 +5,4 @@
 - Mockito Tests
 - Api call implementation (Service / DataManager / Repository)
 - ci.yml (Github Actions)
+- Gradle Kotlin DSL

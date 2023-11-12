@@ -1,9 +1,9 @@
-name: CI
+name: Pipelines CI
 
 on:
-  push:
+  pull_request:
     branches:
-      - '*' # Push to any branch
+      - '*' # Exécutez uniquement pour les pull requests
 
 jobs:
   build:
@@ -33,8 +33,9 @@ jobs:
           name: test-results
           path: app/build/test-results
 
-      - name: Prevent Merge on Failure
-        if: failure()
-        run: |
-          echo "Workflow failed. Branch cannot be merged."
-          exit 1
+      - name: Comment on PR
+        if: failure() # Exécuter seulement en cas d'erreur
+        uses: pullreminders/comment-on-failure@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          message: "The CI workflow has completed. Status: ${{ job.status }}"
