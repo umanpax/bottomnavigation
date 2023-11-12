@@ -48,10 +48,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const comment = process.env.comment;
-            const github = require('@actions/github');
-            const context = github.context;
+            const { context, getOctokit } = require('@actions/github');
 
-            const octokit = new github.getOctokit(process.env.GITHUB_TOKEN);
+            const octokit = new getOctokit(process.env.GITHUB_TOKEN);
 
             octokit.issues.createComment({
               owner: context.repo.owner,
@@ -59,3 +58,4 @@ jobs:
               issue_number: context.issue.number,
               body: comment,
             });
+      
