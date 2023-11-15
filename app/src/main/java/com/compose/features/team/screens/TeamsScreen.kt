@@ -1,46 +1,109 @@
 package com.compose.features.team.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.compose.features.team.states.TeamViewState
 import com.compose.features.team.viewmodels.TeamViewModel
 import com.compose.model.Team
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun TeamsScreen( viewModel: TeamViewModel = getViewModel()) {
+fun TeamsScreen(viewModel: TeamViewModel = getViewModel()) {
 
     val viewState: TeamViewState by viewModel.getViewState().collectAsStateWithLifecycle()
 
     if (viewState.teams.isNotEmpty()) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.DarkGray)
-        ) {
-            itemsIndexed(viewState.teams) { index, team ->
-                TeamItem(team = team)
-            }
+        CollapsingEffectScreen(viewState.teams)
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CollapsingEffectScreen(teams: List<Team>) {
+
+    val lazyListState = rememberLazyListState()
+    var scrolledY = 0f
+    var previousOffset = 0
+    LazyColumn(
+        Modifier
+            .fillMaxWidth()
+            .background(Color.DarkGray),
+        lazyListState,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        item {
+            Modifier.fillMaxWidth()
+            Image(
+                painter = rememberAsyncImagePainter(model = "https://media.licdn.com/dms/image/D4E03AQHT3najx33eZA/profile-displayphoto-shrink_800_800/0/1678569743798?e=2147483647&v=beta&t=6_4-F8cbMUGIdXirtExVIRhauOJcVkFuPcGUFKgPZMw"),
+                alignment = Alignment.Center,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .graphicsLayer {
+                        scrolledY += lazyListState.firstVisibleItemScrollOffset - previousOffset
+                        translationY = scrolledY * 0.5f
+                        scaleX = 1 / ((scrolledY * 0.01f) + 1f)
+                        scaleY = 1 / ((scrolledY * 0.01f) + 1f)
+                        previousOffset = lazyListState.firstVisibleItemScrollOffset
+                    }
+                    .size(225.dp)
+                    .padding(20.dp)
+                    .fillMaxSize()
+                    .clip(CircleShape)
+            )
+        }
+        stickyHeader {
+            Text(
+                text = "Pierre-Alexandre VEZINET",
+                Modifier
+                    .background(Color.White)
+                    .height(80.dp)
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+        itemsIndexed(teams) { index, team ->
+            TeamItem(team = team)
         }
     }
 }
@@ -53,7 +116,7 @@ fun TeamItem(team: Team) {
             .fillMaxSize()
             .padding(16.dp)
             .border(BorderStroke(1.dp, Color.White)),
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         ImageFromUrl(url = team.strTeamBadge)
@@ -62,7 +125,7 @@ fun TeamItem(team: Team) {
             text = team.strTeam,
             color = Color.White,
             fontSize = 20.sp,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            textAlign = TextAlign.Center,
             modifier = Modifier
                 .width(130.dp)
                 .padding(8.dp),
@@ -72,12 +135,15 @@ fun TeamItem(team: Team) {
 }
 
 @Composable
-fun ImageFromUrl(url: String) {
+fun ImageFromUrl(url: String, size: Int = 100) {
     val painter = rememberAsyncImagePainter(model = url)
     Image(
         painter = painter,
         contentDescription = null, // Remplacez par une description appropriée
-        modifier = Modifier.size(100.dp, 100.dp) // Modifier la taille de l'image selon vos besoins
+        modifier = Modifier.size(
+            size.dp,
+            size.dp
+        ) // Modifier la taille de l'image selon vos besoins
     )
 }
 

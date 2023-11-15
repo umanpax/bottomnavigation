@@ -58,7 +58,6 @@ fun LeaguesScreen(
     )
 }
 
-
 @Composable
 fun ListLeagues(
     listLeagues: List<League>,
