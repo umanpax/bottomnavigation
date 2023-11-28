@@ -17,7 +17,7 @@ import com.compose.utils.PrefsManager
 import org.koin.compose.koinInject
 
 @Composable
-fun ProfileScreen(prefsManager: PrefsManager = koinInject()) {
+fun ProfileScreen(prefsManager: PrefsManager = koinInject(), navigateToHorizontalViewPager: () -> Unit) {
     Column(Modifier.fillMaxSize()) {
         Text(text = "Nom : " + prefsManager.getStringFromPreferences(Constants.LASTNAME))
         Spacer(modifier = Modifier.height(16.dp))
@@ -25,6 +25,10 @@ fun ProfileScreen(prefsManager: PrefsManager = koinInject()) {
 
         DisplayActionButton(text = stringResource(id = R.string.clear_preferences), onClickedButton = {
             prefsManager.clearAllPreferences()
+        })
+
+        DisplayActionButton(text = stringResource(id = R.string.display_horizontal_viewpager), onClickedButton = {
+            navigateToHorizontalViewPager()
         })
     }
 }

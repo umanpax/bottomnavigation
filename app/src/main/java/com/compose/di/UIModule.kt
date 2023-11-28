@@ -1,6 +1,6 @@
 package com.compose.di
 
-import androidx.lifecycle.SavedStateHandle
+import com.compose.features.horizontalviewpager.viewmodels.HorizontalViewPagerViewModel
 import com.compose.features.league.services.LeagueDataManager
 import com.compose.features.league.services.LeagueRepository
 import com.compose.features.league.viewmodels.LeagueViewModel
@@ -46,6 +46,12 @@ val teamViewModel = module {
     }
 }
 
+val horizontalViewPagerViewModel = module {
+    viewModel {
+        HorizontalViewPagerViewModel()
+    }
+}
+
 val mainScreenViewModel = module {
     single { MainScreenViewModel() }
 }
@@ -58,5 +64,6 @@ val koinUiModules = listOf(
     moduleTeamRepository,
     leagueViewModel,
     teamViewModel,
-    mainScreenViewModel
+    mainScreenViewModel,
+    horizontalViewPagerViewModel
 )
