@@ -3,6 +3,7 @@ package com.compose.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.compose.features.horizontalviewpager.navigation.horizontalViewPagerScreen
 import com.compose.features.league.navigation.leagueScreen
 import com.compose.features.profile.navigation.profileScreen
 import com.compose.features.team.navigation.teamScreen
@@ -17,8 +18,12 @@ fun Navigation(
             val route ="${NavigationItem.Team.route}/$data"
             navController.navigate(route)
         })
-        profileScreen()
+        profileScreen(navigateToHorizontalViewPager = {
+            navController.navigate(NavigationItem.HorizontalViewPager.route)
+        })
         teamScreen()
+
+        horizontalViewPagerScreen()
     }
 }
 

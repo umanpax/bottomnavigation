@@ -5,10 +5,10 @@ import androidx.navigation.compose.composable
 import com.compose.features.profile.screens.ProfileScreen
 import com.compose.navigation.NavigationItem
 
-fun NavGraphBuilder.profileScreen() {
+fun NavGraphBuilder.profileScreen(navigateToHorizontalViewPager: () -> Unit) {
     composable(
         route = NavigationItem.Profile.route,
     ) {
-        ProfileScreen()
+        ProfileScreen(navigateToHorizontalViewPager = navigateToHorizontalViewPager)
     }
 }

@@ -13,5 +13,6 @@
     <string name="go">Go !</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="display_horizontal_viewpager">Display Horizontal ViewPager</string>
     <string name="clear_preferences">Clear Preferences</string>
 </resources>

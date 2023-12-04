@@ -5,19 +5,14 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -38,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
+import com.compose.common.ImageFromUrl
 import com.compose.features.team.states.TeamViewState
 import com.compose.features.team.viewmodels.TeamViewModel
 import com.compose.model.Team
@@ -134,18 +129,7 @@ fun TeamItem(team: Team) {
     }
 }
 
-@Composable
-fun ImageFromUrl(url: String, size: Int = 100) {
-    val painter = rememberAsyncImagePainter(model = url)
-    Image(
-        painter = painter,
-        contentDescription = null, // Remplacez par une description appropriée
-        modifier = Modifier.size(
-            size.dp,
-            size.dp
-        ) // Modifier la taille de l'image selon vos besoins
-    )
-}
+
 
 @Preview
 @Composable

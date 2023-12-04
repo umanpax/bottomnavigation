@@ -10,4 +10,5 @@ sealed class NavigationItem(var route: String, val icon: ImageVector?, var title
     object League : NavigationItem("League", Icons.Rounded.List, "League")
     object Profile : NavigationItem("Profile", Icons.Rounded.Info, "Profile")
     object Team : NavigationItem("Team", Icons.Rounded.Info, "Team")
+    object HorizontalViewPager : NavigationItem("HorizontalViewPager", Icons.Rounded.Info, "HorizontalViewPager")
 }
